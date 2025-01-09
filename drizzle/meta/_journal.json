@@ -1,0 +1,34 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1734872044384,
+      "tag": "0000_gorgeous_living_lightning",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1734877769617,
+      "tag": "0001_brief_white_tiger",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1735923649837,
+      "tag": "0002_cool_timeslip",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1736002235767,
+      "tag": "0003_lying_sunspot",
+      "breakpoints": true
+    }
+  ]
+}
