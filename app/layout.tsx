@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
-import React from "react";
+import React, { Suspense } from "react";
 
 import { Toaster } from "@/components/ui/sonner";
 import { QueryProvider } from "@/providers/query-provider";
@@ -27,7 +27,9 @@ export default function RootLayout({
           <QueryProvider>
             <SheetProvider />
             <Toaster />
-            {children}
+            <Suspense fallback={<div>Loading...</div>}>
+              {children}
+            </Suspense>
           </QueryProvider>
         </body>
       </html>

@@ -1,22 +1,28 @@
-"use client";
-import { Loader2, Plus } from "lucide-react";
-import React, { Suspense } from "react";
-import { useGetCategories } from "@/features/categories/api/use-get-categories";
-import { useBulkDeleteCategories } from "@/features/categories/api/use-bulk-delete-categories";
-import { useNewCategory } from "@/features/categories/hooks/use-new-category";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { columns } from "@/app/(dashboard)/categories/columns";
-import { DataTable } from "@/components/data-table";
-import { Skeleton } from "@/components/ui/skeleton";
+'use client';
+import { Loader2, Plus } from 'lucide-react';
+
+import React from 'react';
+import { useGetCategories } from '@/features/categories/api/use-get-categories';
+import { useBulkDeleteCategories } from '@/features/categories/api/use-bulk-delete-categories';
+import { useNewCategory } from '@/features/categories/hooks/use-new-category';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+
+import { columns } from '@/app/(dashboard)/categories/columns';
+import { DataTable } from '@/components/data-table';
+import { Skeleton } from '@/components/ui/skeleton';
+
 
 const CategoriesPage = () => {
   const { onOpen } = useNewCategory();
   const deleteCategories = useBulkDeleteCategories();
+  // fetch categories data
   const categoriesQuery = useGetCategories();
   const categories = categoriesQuery.data || [];
 
-  const isDisabled = categoriesQuery.isLoading || deleteCategories.isPending;
+  const isDisabled =
+    categoriesQuery.isLoading ||
+    deleteCategories.isPending;
 
   if (categoriesQuery.isLoading) {
     return (
@@ -31,10 +37,11 @@ const CategoriesPage = () => {
             </div>
           </CardContent>
         </Card>
+
+
       </div>
     );
   }
-
   return (
     <div className="mx-auto -mt-24 w-full max-w-screen-2xl pb-10">
       <Card className="border-none drop-shadow-sm">
@@ -47,6 +54,8 @@ const CategoriesPage = () => {
             Add New
           </Button>
         </CardHeader>
+
+        {/* Category Data Table */}
         <CardContent>
           <DataTable
             columns={columns}
@@ -56,20 +65,12 @@ const CategoriesPage = () => {
               const ids = row.map((r) => r.original.id);
               deleteCategories.mutate({ ids });
             }}
-            disabled={isDisabled}
-          />
+            disabled={isDisabled} />
         </CardContent>
+
       </Card>
     </div>
   );
 };
 
-const CategoriesPageWrapper = () => {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <CategoriesPage />
-    </Suspense>
-  );
-};
-
-export default CategoriesPageWrapper;
+export default CategoriesPage;

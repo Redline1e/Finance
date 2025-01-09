@@ -1,13 +1,16 @@
-"use client";
+"use client"
 import { toast } from "sonner";
 import { Loader2, Plus } from "lucide-react";
-import React, { useState, Suspense } from "react";
+
+import React, { useState } from "react";
+
 import { useNewTransaction } from "@/features/transactions/hooks/use-new-transaction";
 import { useGetTransactions } from "@/features/transactions/api/use-get-transactions";
 import { useBulkDeleteTransactions } from "@/features/transactions/api/use-bulk-delete-transactions";
 import { useBulkCreateTransactions } from "@/features/transactions/api/use-bulk-create-transactions";
 import { transactions as transactionSchema } from "@/db/schema";
 import { useSelectAccount } from "@/features/accounts/hooks/use-select-account";
+
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/data-table";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -43,6 +46,7 @@ const TransactionsPage = () => {
   const newTransaction = useNewTransaction();
   const createTransactions = useBulkCreateTransactions();
   const deleteTransactions = useBulkDeleteTransactions();
+  // fetch transactions data
   const transactionsQuery = useGetTransactions();
   const transactions = transactionsQuery.data || [];
 
@@ -134,12 +138,4 @@ const TransactionsPage = () => {
   );
 };
 
-const TransactionsPageWrapper = () => {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <TransactionsPage />
-    </Suspense>
-  );
-};
-
-export default TransactionsPageWrapper;
+export default TransactionsPage;
