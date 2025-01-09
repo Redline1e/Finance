@@ -1,7 +1,8 @@
-import { useRef, useState } from 'react';
+import React from 'react';
+import { useRef, useState } from "react";
 
-import { useGetAccounts } from '@/features/accounts/api/use-get-accounts';
-import { useCreateAccount } from '@/features/accounts/api/use-create-account';
+import { useGetAccounts } from "@/features/accounts/api/use-get-accounts";
+import { useCreateAccount } from "@/features/accounts/api/use-create-account";
 
 import {
   Dialog,
@@ -10,33 +11,40 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Select } from '@/components/select';
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Select } from "@/components/select";
 
-export const useSelectAccount = (): [() => JSX.Element, () => Promise<unknown>] => {
+export const useSelectAccount = (): [
+  () => React.JSX.Element,
+  () => Promise<unknown>
+] => {
   const accountQuery = useGetAccounts();
   const accountMutation = useCreateAccount();
-  const onCreateAccount = (name: string) => accountMutation.mutate({
-    name,
-  });
+  const onCreateAccount = (name: string) =>
+    accountMutation.mutate({
+      name,
+    });
   const accountOptions = (accountQuery.data ?? []).map((account) => ({
     label: account.name,
     value: account.id,
   }));
 
-  const [promise, setPromise] = useState<{ resolve: (value: string | undefined) => void } | null>(null);
-  const confirm = () => new Promise((resolve, reject) => {
-    setPromise({ resolve });
-  });
+  const [promise, setPromise] = useState<{
+    resolve: (value: string | undefined) => void;
+  } | null>(null);
+  const confirm = () =>
+    new Promise((resolve, reject) => {
+      setPromise({ resolve });
+    });
 
-  const selectValue = useRef<string>();
+  const selectValue = useRef<string | undefined>(undefined);
 
   const handleClose = () => {
     setPromise(null);
   };
   const handleConfirm = () => {
-    promise?.resolve(selectValue.current);
+    promise?.resolve(selectValue.current ?? undefined);
     handleClose();
   };
   const handleCancel = () => {
@@ -48,25 +56,22 @@ export const useSelectAccount = (): [() => JSX.Element, () => Promise<unknown>] 
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Select Account</DialogTitle>
-          <DialogDescription>Please select an account to continue.</DialogDescription>
+          <DialogDescription>
+            Please select an account to continue.
+          </DialogDescription>
         </DialogHeader>
         <Select
           placeholder="Select an account"
           options={accountOptions}
           onCreate={onCreateAccount}
-          onChange={(value) => selectValue.current = value}
+          onChange={(value) => (selectValue.current = value)}
           disabled={accountQuery.isLoading || accountMutation.isPending}
         />
         <DialogFooter className="pt-2">
-          <Button
-            onClick={handleCancel}
-            variant="outline"
-          >
+          <Button onClick={handleCancel} variant="outline">
             Cancel
           </Button>
-          <Button
-            variant="default"
-            onClick={handleConfirm}>
+          <Button variant="default" onClick={handleConfirm}>
             Confirm
           </Button>
         </DialogFooter>

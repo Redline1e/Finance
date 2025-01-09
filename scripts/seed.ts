@@ -3,7 +3,7 @@ import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
 import { eachDayOfInterval, format, subDays } from "date-fns";
 import { accounts, categories, transactions } from "@/db/schema";
-import { convertAmountToMiliunits } from "@/lib/utils";
+import { convertAmountToMiliuinits } from "@/lib/utils";
 
 config({ path: ".env.local" });
 
@@ -59,7 +59,7 @@ const generateTransactionsForDay = (day: Date) => {
       SEED_CATEGORIES[Math.floor(Math.random() * SEED_CATEGORIES.length)];
     const isExpense = Math.random() > 0.6; // 60% chance of being and expense
     const amount = generateRandomAmount(category);
-    const formattedAmount = convertAmountToMiliunits(
+    const formattedAmount = convertAmountToMiliuinits(
       isExpense ? -amount : amount
     ); // Negative for expenses
 

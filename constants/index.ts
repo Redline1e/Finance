@@ -1,4 +1,8 @@
-import { NavbarLink } from "@/types";
+interface NavbarLink {
+  imgURL?: string;
+  label: string;
+  route: string;
+}
 
 export const navbarLinks: NavbarLink[] = [
   {

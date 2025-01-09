@@ -1,28 +1,24 @@
-'use client';
-import { toast } from 'sonner';
-import { Loader2, Plus } from 'lucide-react';
+"use client";
+import { toast } from "sonner";
+import { Loader2, Plus } from "lucide-react";
+import React, { useState, Suspense } from "react";
+import { useNewTransaction } from "@/features/transactions/hooks/use-new-transaction";
+import { useGetTransactions } from "@/features/transactions/api/use-get-transactions";
+import { useBulkDeleteTransactions } from "@/features/transactions/api/use-bulk-delete-transactions";
+import { useBulkCreateTransactions } from "@/features/transactions/api/use-bulk-create-transactions";
+import { transactions as transactionSchema } from "@/db/schema";
+import { useSelectAccount } from "@/features/accounts/hooks/use-select-account";
+import { Button } from "@/components/ui/button";
+import { DataTable } from "@/components/data-table";
+import { Skeleton } from "@/components/ui/skeleton";
+import { columns } from "@/app/(dashboard)/transactions/columns";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { UploadButton } from "@/app/(dashboard)/transactions/upload-button";
+import { ImportCard } from "@/app/(dashboard)/transactions/import-card";
 
-import React, { useState } from 'react';
-
-import { useNewTransaction } from '@/features/transactions/hooks/use-new-transaction';
-import { useGetTransactions } from '@/features/transactions/api/use-get-transactions';
-import { useBulkDeleteTransactions } from '@/features/transactions/api/use-bulk-delete-transactions';
-import { useBulkCreateTransactions } from '@/features/transactions/api/use-bulk-create-transactions';
-import { transactions as transactionSchema } from '@/db/schema';
-import { useSelectAccount } from '@/features/accounts/hooks/use-select-account';
-
-import { Button } from '@/components/ui/button';
-import { DataTable } from '@/components/data-table';
-import { Skeleton } from '@/components/ui/skeleton';
-import { columns } from '@/app/(dashboard)/transactions/columns';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { UploadButton } from '@/app/(dashboard)/transactions/upload-button';
-import { ImportCard } from '@/app/(dashboard)/transactions/import-card';
-
-// eslint-disable-next-line no-unused-vars
 enum VARIANTS {
-  // eslint-disable-next-line no-unused-vars
-  LIST = 'LIST', IMPORT = 'IMPORT'
+  LIST = "LIST",
+  IMPORT = "IMPORT",
 }
 
 const INITIAL_IMPORT_RESULTS = {
@@ -47,18 +43,18 @@ const TransactionsPage = () => {
   const newTransaction = useNewTransaction();
   const createTransactions = useBulkCreateTransactions();
   const deleteTransactions = useBulkDeleteTransactions();
-  // fetch transactions data
   const transactionsQuery = useGetTransactions();
   const transactions = transactionsQuery.data || [];
 
   const isDisabled =
-    transactionsQuery.isLoading ||
-    deleteTransactions.isPending;
+    transactionsQuery.isLoading || deleteTransactions.isPending;
 
-  const onSubmitImport = async (values: typeof transactionSchema.$inferInsert[]) => {
+  const onSubmitImport = async (
+    values: (typeof transactionSchema.$inferInsert)[]
+  ) => {
     const accountId = await confirm();
     if (!accountId) {
-      return toast.error('Please select and account to continue.');
+      return toast.error("Please select and account to continue.");
     }
     const data = values.map((value) => ({
       ...value,
@@ -84,8 +80,6 @@ const TransactionsPage = () => {
             </div>
           </CardContent>
         </Card>
-
-
       </div>
     );
   }
@@ -96,6 +90,7 @@ const TransactionsPage = () => {
         <ImportCard
           data={importResults.data}
           onCancel={onCancelImport}
+          // @ts-expect-error Ignoring type error because the types for onSubmitImport are mismatched
           onSubmit={onSubmitImport}
         />
       </>
@@ -131,12 +126,20 @@ const TransactionsPage = () => {
               const ids = row.map((r) => r.original.id);
               deleteTransactions.mutate({ ids });
             }}
-            disabled={isDisabled} />
+            disabled={isDisabled}
+          />
         </CardContent>
-
       </Card>
     </div>
   );
 };
 
-export default TransactionsPage;
+const TransactionsPageWrapper = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <TransactionsPage />
+    </Suspense>
+  );
+};
+
+export default TransactionsPageWrapper;

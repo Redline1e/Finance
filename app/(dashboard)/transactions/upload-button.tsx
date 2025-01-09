@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Upload } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCSVReader } from 'react-papaparse';
@@ -23,3 +24,4 @@ export const UploadButton = ({ onUpload }: Props) => {
     </CSVReader>
   );
 };
+/* eslint-enable @typescript-eslint/no-explicit-any */

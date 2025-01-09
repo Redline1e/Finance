@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Separator } from '@/components/ui/separator';
 import { formatCurrency } from '@/lib/utils';
 
@@ -26,3 +27,5 @@ export const CategoryTooltip = ({ active, payload }: any) => {
 
   );
 };
+
+/* eslint-enable @typescript-eslint/no-explicit-any */

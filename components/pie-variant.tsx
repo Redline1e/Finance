@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
 import { formatPercentage } from '@/lib/utils';
 import { CategoryTooltip } from '@/components/category-tooltip';
@@ -74,3 +75,4 @@ export const PieVariant = ({ data }: Props) => {
     </ResponsiveContainer>
   );
 };
+/* eslint-enable @typescript-eslint/no-explicit-any */

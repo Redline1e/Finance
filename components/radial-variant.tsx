@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Legend, RadialBar, RadialBarChart, ResponsiveContainer } from 'recharts';
 import { formatCurrency } from '@/lib/utils';
 
@@ -72,3 +73,4 @@ export const RadialVariant = ({ data }: Props) => {
     </ResponsiveContainer>
   );
 };
+/* eslint-enable @typescript-eslint/no-explicit-any */

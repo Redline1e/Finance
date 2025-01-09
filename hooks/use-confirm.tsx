@@ -1,3 +1,4 @@
+import React from 'react';
 import { useState } from 'react';
 import {
   Dialog,
@@ -9,7 +10,7 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 
-export const useConfirm = (title: string, message: string): [() => JSX.Element, () => Promise<unknown>] => {
+export const useConfirm = (title: string, message: string): [() => React.JSX.Element, () => Promise<unknown>] => {
   const [promise, setPromise] = useState<{ resolve: (value: boolean) => void } | null>(null);
   const confirm = () => new Promise((resolve, reject) => {
     setPromise({ resolve });

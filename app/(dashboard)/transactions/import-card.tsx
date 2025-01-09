@@ -1,39 +1,43 @@
 // Date input that needs to appear on CSV file
-import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import ImportTable from './import-table';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { convertAmountToMiliuinits } from '@/lib/utils';
-import { format, parse } from 'date-fns';
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
+import ImportTable from "./import-table";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { convertAmountToMiliuinits } from "@/lib/utils";
+import { format, parse } from "date-fns";
 
-const dateFormat = 'yyyy-MM-dd HH:mm:ss';
-const outputFormat = 'yyyy-MM-dd';
+const dateFormat = "yyyy-MM-dd HH:mm:ss";
+const outputFormat = "yyyy-MM-dd";
 
-const requiredOptions = [
-  'amount',
-  'date',
-  'payee',
-];
+const requiredOptions = ["amount", "date", "payee"];
 
 interface SelectedColumnsState {
   [key: string]: string | null;
 }
 
+interface FormattedData {
+  amount: number;
+  date: string;
+  [key: string]: string | number;
+}
+
 type Props = {
   data: string[][];
   onCancel: () => void;
-  onSubmit: (data: any) => void;
-}
+  onSubmit: (data: FormattedData[]) => void;
+};
 
 export const ImportCard = ({ data, onCancel, onSubmit }: Props) => {
-  const [selectedColumns, setSelectedColumns] = useState<SelectedColumnsState>({});
+  const [selectedColumns, setSelectedColumns] = useState<SelectedColumnsState>(
+    {}
+  );
 
   const headers = data[0];
   const body = data.slice(1);
 
   const onTableHeadSelectChange = (
     columnIndex: number,
-    value: string | null,
+    value: string | null
   ) => {
     setSelectedColumns((prev) => {
       const newSelectedColumns = { ...prev };
@@ -42,7 +46,7 @@ export const ImportCard = ({ data, onCancel, onSubmit }: Props) => {
           newSelectedColumns[key] = null;
         }
       }
-      if (value === 'skip') {
+      if (value === "skip") {
         value = null;
       }
       newSelectedColumns[`column_${columnIndex}`] = value;
@@ -53,7 +57,7 @@ export const ImportCard = ({ data, onCancel, onSubmit }: Props) => {
   const progress = Object.values(selectedColumns).filter(Boolean).length;
   const handleContinue = () => {
     const getColumnIndex = (column: string) => {
-      return column.split('_')[1];
+      return column.split("_")[1];
     };
 
     const mappedData = {
@@ -61,22 +65,24 @@ export const ImportCard = ({ data, onCancel, onSubmit }: Props) => {
         const columnIndex = getColumnIndex(`column_${index}`);
         return selectedColumns[`column_${columnIndex}`] || null;
       }),
-      body: body.map((row) => {
-        const transformedRow = row.map((cell, index) => {
-          const columnIndex = getColumnIndex(`column_${index}`);
-          return selectedColumns[`column_${columnIndex}`] ? cell : null;
-        });
-        return transformedRow.every((item) => item === null)
-          ? []
-          : transformedRow;
-      }).filter((row) => row.length > 0),
+      body: body
+        .map((row) => {
+          const transformedRow = row.map((cell, index) => {
+            const columnIndex = getColumnIndex(`column_${index}`);
+            return selectedColumns[`column_${columnIndex}`] ? cell : null;
+          });
+          return transformedRow.every((item) => item === null)
+            ? []
+            : transformedRow;
+        })
+        .filter((row) => row.length > 0),
     };
 
     const arrayOfData = mappedData.body.map((row) => {
-      return row.reduce((acc: any, cell, index) => {
+      return row.reduce((acc: Record<string, string>, cell, index) => {
         const header = mappedData.headers[index];
         if (header !== null) {
-          acc[header] = cell;
+          acc[header] = cell || "";
         }
         return acc;
       }, {});
@@ -97,11 +103,7 @@ export const ImportCard = ({ data, onCancel, onSubmit }: Props) => {
             Import Transaction
           </CardTitle>
           <div className="flex flex-col items-center gap-2 lg:flex-row">
-            <Button
-              size="sm"
-              onClick={onCancel}
-              className="w-full lg:w-auto"
-            >
+            <Button size="sm" onClick={onCancel} className="w-full lg:w-auto">
               Cancel
             </Button>
             <Button
