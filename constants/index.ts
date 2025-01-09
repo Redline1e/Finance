@@ -21,8 +21,8 @@ export const navbarLinks: NavbarLink[] = [
     route: "/categories",
     label: "Categories",
   },
-  {
-    route: "/settings",
-    label: "Settings",
-  },
+  //   {
+  //     route: "/settings",
+  //     label: "Settings",
+  //   },
 ];
