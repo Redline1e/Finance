@@ -4,7 +4,7 @@
 
 ## Live Demo
 
-Check out the live demo: [Finance](finance-h4ns.vercel.app)
+Check out the live demo: [Finance](https://finance-h4ns.vercel.app/)
 
 ## Technologies Used
 
