@@ -80,7 +80,7 @@ finance-main/
 
     ```bash
     git clone <repository-url>
-    cd finance
+    cd Finance
     ```
 
 2. Install dependencies:
